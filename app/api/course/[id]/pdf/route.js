@@ -40,7 +40,7 @@ export async function POST(request, {params}) {
         const { id } =  await params;
         const {pdfName , pdfUrl , publicId } = await request.json() ; 
         if(!pdfName || !pdfUrl || !publicId){ 
-            return NextResponse.json({message: "Generer le pfd d'abord"}, {status : 400}) ;
+            return NextResponse.json({message: "Generer the pdf first"}, {status : 400}) ;
          }
         const newPdf = await PdfModel.create({pdfName, pdfUrl, publicId , courseId : id , userId : session.user.id}) ; 
         // console.log("Endopoint save pdf ", newPdf) ; 

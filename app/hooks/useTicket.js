@@ -3,7 +3,25 @@ import toast from 'react-hot-toast'
 
 const useTicket = () => {
 
+
+    const [ticketRes, setTicketRes] = useState([]) ; 
     const  [loadingTicket , setLoadingTicket] = useState(false)
+
+
+    const getTicketRes = async() => {
+           setLoadingTicket(true) ; 
+           try {
+                const res = await fetch("/api/ticket") ;
+                const data = await res.json() ; 
+                if(data.error) throw new Error(data.error) ; 
+                setTicketRes(data.tickets) ; 
+           } catch (error) {
+                console.log("Erruer getting user ticketRes", error.message) ; 
+           }finally{
+                setLoadingTicket(false) ; 
+           }
+    }
+
 
     const sendTicket = async({email , content}) =>{
         const success = handleInputsError({email , content})
@@ -27,9 +45,10 @@ const useTicket = () => {
             setLoadingTicket(false) ; 
         }
     }
+
  
 
-    return {sendTicket , loadingTicket}
+    return {sendTicket , loadingTicket, ticketRes , getTicketRes}
 }
 
 export default useTicket

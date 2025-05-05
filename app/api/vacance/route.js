@@ -20,6 +20,8 @@ export async function GET() {
         if(!session){
             return NextResponse.json({message : "Unauthorized : No session valid"} , {status : 401}) ; 
         }
+        const nbreVacance = await Vacances.countDocuments({userId : session.user.id} ) ; 
+        console.log("Nbre vacance --->" , nbreVacance) ; 
          const vacances = await Vacances.find({userId : session.user.id}) ; 
          return NextResponse.json({vacances : vacances} , {status : 200}) ; 
     } catch (error) {
@@ -38,10 +40,24 @@ export async function POST(request){
         if(!session){
             return NextResponse.json({message : "Unauthorized : No session valid"} , {status : 401}) ; 
         }
+
+        const LIMITE_RATE = parseInt(process.env.LIMITE_RATE , 10)  ; 
+        const nbreVacance = await Vacances.countDocuments({userId : session.user.id} ) ; 
+        console.log("Nbre vacance --->" , nbreVacance) ; 
+
+        if(nbreVacance >= LIMITE_RATE) {
+            console.log("Limite reached (nbre max = " , nbreVacance ,  ")"   ) ; 
+            return NextResponse.json({message: "Limite vac reached"} , {status : 403})  ; 
+        }
+
           const {cityName , experience , images, publicId } = await request.json() ;
+          if(!cityName || !experience || !images ||  !publicId ){
+              return NextResponse.json({message : "Fieds are required"}, {status : 400}) ; 
+          }
           const newVacance = await Vacances.create({cityName , experience , images , publicId ,  userId : session.user.id}) ; 
           return NextResponse.json({newVacance : newVacance} , {status : 201})
-    } catch (error) {
+   
+        } catch (error) {
         console.error("Error while adding vacance :" , error.message) ; 
         return NextResponse.json({message : "Internal error server"} , {status : 500});
     }

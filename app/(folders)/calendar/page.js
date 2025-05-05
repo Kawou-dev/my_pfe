@@ -85,7 +85,7 @@ const Page = () => {
                {/* All your events */}
 
           <div className="mt-6 w-full max-w-lg">
-          <h2 className="text-2xl font-bold mb-2 text-slate-700">Événements du jour :</h2>
+          <h2 className="text-2xl font-bold mb-2 text-slate-700">Mes Événements :</h2>
           <ul className="list-disc list-inside">
           {events.map((event, index) => (
             <div key={index}>

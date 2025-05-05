@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { signIn } from "next-auth/react";
+import { getSession, signIn } from "next-auth/react";
 import toast from "react-hot-toast";
 
 const LoginForm = () => {
@@ -41,7 +41,13 @@ const LoginForm = () => {
     
       if (res.ok) {
         toast.success("Connected successfully !");
-        router.replace("/dashboard");
+        const session  = await getSession() ; 
+        if(session.user?.isAdmin){
+          router.replace("/admin") ; 
+        }else{
+          router.replace("/dashboard");
+        }        
+       
       } else {
         console.log("Erreur request :", res.error);
           if (res.error === "CredentialsSignin") {

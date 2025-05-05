@@ -1,17 +1,20 @@
 import mongoose from "mongoose";
 import bcrypt from "bcrypt";
-import { config } from "dotenv";
-// import { connectDB } from "./lib/config/connectDB.js";
-import UserModel from "./../lib/models/UserModel.js";
+// import { config } from "dotenv";
+import dotenv from 'dotenv';
+import { connectDB } from "../../../lib/config/connectDB.js";
+import UserModel from "../../../lib/models/UserModel.js";
 // import { connectDB } from "@/lib/config/connectDB.js";
 
-config(); // Charge les variables d'environnement
+dotenv.config();
+// config(); // Charge les variables d'environnement
 
 const createAdmin = async () => {
   try {
     
-      // await connectDB() ; 
-    await mongoose.connect(process.env.MONGODB_URI)  ; 
+    // console.log(process.env.MONGODB_URI)  ; 
+      await connectDB() ; 
+    //  await mongoose.connect(process.env.MONGODB_URI)  ; 
 
     const email = process.env.ADMIN_EMAIL;
     const password = process.env.ADMIN_PASSWORD;
@@ -34,6 +37,7 @@ const createAdmin = async () => {
       email,
       username: "admin",
       password: hashedPassword,
+      gender : "male" , 
       isAdmin: true,
     });
 

@@ -1,17 +1,29 @@
-"use client"
-import React, { useEffect, useState } from 'react'
+"use client";
+import React, { useEffect, useState } from 'react';
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import toast from 'react-hot-toast';
 
 const AdminPage = () => {
+  const { data: session, status } = useSession();
+  const router = useRouter();
+
   const [tickets, setTickets] = useState([]);
   const [responses, setResponses] = useState({});
 
-  const handleResponseChange = (ticketId, text) => {
-    setResponses({ ...responses, [ticketId]: text });
-  };
+  useEffect(() => {
+    if (status === "loading") return;
+
+    if (!session || !session.user?.isAdmin) {
+      router.push("/"); 
+    } else {
+      fetcTickets();
+    }
+  }, [session, status]);
 
   const fetcTickets = async () => {
     try {
-      const res = await fetch("/api/ticket");
+      const res = await fetch("/api/ticket/reply");
       const data = await res.json();
       setTickets(data.tickets);
     } catch (error) {
@@ -19,9 +31,9 @@ const AdminPage = () => {
     }
   };
 
-  useEffect(() => {
-    fetcTickets();
-  }, []);
+  const handleResponseChange = (ticketId, text) => {
+    setResponses({ ...responses, [ticketId]: text });
+  };
 
   const handleSendResponse = async (ticketId) => {
     const res = await fetch("/api/ticket/reply", {
@@ -34,13 +46,18 @@ const AdminPage = () => {
     });
 
     if (res.ok) {
-      alert("Réponse envoyée !");
+      // alert("Réponse envoyée !");
+      toast.success("Respond sent")
       setResponses((prev) => ({ ...prev, [ticketId]: "" }));
-      fetcTickets(); // Recharge les tickets avec la nouvelle réponse
+      fetcTickets(); // recharge la liste
     } else {
       alert("Erreur lors de l'envoi.");
     }
   };
+
+  if (status === "loading") {
+    return <p>Chargement...</p>;
+  }
 
   return (
     <div className="max-w-3xl mx-auto p-6">
@@ -50,7 +67,7 @@ const AdminPage = () => {
         <p>Aucun ticket pour le moment.</p>
       ) : (
         tickets.map((ticket) => (
-          <div key={ticket._id}  className="border gap-2 p-4 rounded mb-4 bg-white shadow-sm">
+          <div key={ticket._id} className="border gap-2 p-4 rounded mb-4 bg-white shadow-sm">
             <p><strong>Email :</strong> {ticket.email}</p>
             <p><strong>Question :</strong> {ticket.content}</p>
 

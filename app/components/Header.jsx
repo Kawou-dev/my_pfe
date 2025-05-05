@@ -156,7 +156,7 @@ const Header = () => {
       <div className="text-center flex justify-center flex-col items-center   ">
         <a href={session?.user?.profilePic}>
           <img
-            src={session?.user?.profilePic}
+            src={session?.user?.profilePic || "aaaaa"}
             alt="Profile"
             className="w-16 h-16 rounded-full object-cover border-2 border-white mb-2"
           />

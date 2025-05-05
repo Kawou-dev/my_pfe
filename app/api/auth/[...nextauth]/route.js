@@ -4,6 +4,8 @@ import NextAuth from "next-auth";
 import UserModel from "@/lib/models/UserModel";
 import { connectDB } from "@/lib/config/connectDB";
 
+
+
 const authOptions = {
   providers: [
     CredentialsProvider({
@@ -33,6 +35,7 @@ const authOptions = {
           email: user.email,
           username: user.username,
           profilePic: user.profilePic || "",
+          isAdmin: user.isAdmin,
         };
       },
     }),
@@ -46,6 +49,7 @@ const authOptions = {
         token.id = user.id;
         token.username = user.username;
         token.profilePic = user.profilePic;
+        token.isAdmin = user.isAdmin;
       }
       return token;
     },
@@ -54,6 +58,7 @@ const authOptions = {
         session.user.id = token.id;
         session.user.username = token.username;
         session.user.profilePic = token.profilePic;
+        session.user.isAdmin = token.isAdmin;
       }
       return session;
     },

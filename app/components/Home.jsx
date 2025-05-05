@@ -202,12 +202,12 @@ const VacationCard = ({ vac, onShare, onSet , onDelete }) => (
         </div>
           
         <div className="flex items-center gap-0.5 ">
-         <FaWhatsapp onClick={onShare}    className="text-md cursor-pointer text-green-600 " />
-         <p className="text-sm">Envoyer</p>
+         <FaWhatsapp onClick={onShare}    className="text-xl cursor-pointer text-green-600 " />
+         <p className="text-md">Envoyer</p>
       
         </div>
          <button className="flex items-center  rounded-lg">
-          <IoTrashOutline onClick={onDelete}  className="text-red-400" />
+          <IoTrashOutline onClick={onDelete}  className="text-red-400 text-xl cursor-pointer " />
              {/* <FiShare2 className="mr-1 text-md cursor-pointer" />  */}
         </button>
       
