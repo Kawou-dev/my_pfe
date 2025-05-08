@@ -38,7 +38,7 @@ const Page = () => {
 
   useEffect(() => {
     fetchEvents() ; 
-  },[])
+  },[fetchEvents])
 
   const handleDeleteEvent = async(id) => {
         await deleteEvent(id) ; 
@@ -77,7 +77,7 @@ const Page = () => {
         <input type="text" placeholder="Nom de l'événement" value={eventName} onChange={(e) => setEventName(e.target.value)}
           className="border p-2 rounded w-full max-w-sm" />
         <button onClick={handleAddEvent} className="bg-green-500 text-white px-4 py-2 rounded cursor-pointer hover:bg-green-600 w-full max-w-sm">
-          Ajouter l'événement
+          Ajouter l&apos; événement
         </button>
 
 

@@ -1,4 +1,5 @@
 'use client';
+import toast from 'react-hot-toast';
 import { useState, useRef, useEffect } from 'react';
 
 export default function Chatbot() {
@@ -32,9 +33,12 @@ export default function Chatbot() {
         body: JSON.stringify({ message: inputMessage }),
       });
       const data = await res.json();
+      if(data.error) throw new Error(data.error) ; 
+      if(!res.ok) throw new Error(res.error) ;
       setMessages(prev => [...prev, { text: data.reply, sender: 'bot' }]);
     } catch (error) {
-      setMessages(prev => [...prev, { text: "Désolé, une erreur s'est produite.", sender: 'bot' }]);
+      toast.error(error.message) ; 
+      setMessages(prev => [...prev, { text: "Vous avez atteint la limite journalière, revenez demain", sender: 'bot' }]);
     } finally {
       setLoading(false);
     }

@@ -9,6 +9,7 @@ import { signOut } from "next-auth/react";
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { IoCalendarNumberOutline } from "react-icons/io5";
+import Image from "next/image";
 
 
 const Header = () => {
@@ -25,6 +26,7 @@ const Header = () => {
     setIsAccountOpen(!isAccountOpen);
   };
 
+  const targetHref = session?.user?.isAdmin ? "/admin" : "/reponses";
   
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -98,7 +100,7 @@ const Header = () => {
             />
           </div>
         )}
-          <Link href={"/reponses"}>
+          <Link href={targetHref}>
               <div>
               <IoIosNotificationsOutline className="text-2xl cursor-pointer" />
             </div>
@@ -108,57 +110,24 @@ const Header = () => {
             className="text-xl cursor-pointer"
             onClick={opVsAccount}
           />
-          {/* {isAccountOpen && (
-            <div className="absolute z-50 border-2 w-[220px] h-[300px] top-11 md:right-[-60px] right-[-15px] rounded-2xl bg-slate-800">
-              <div className="text-white p-4 flex flex-col items-center justify-center">
-                       <div>
-                       <a href={session?.user?.profilePic}><img src={session?.user?.profilePic} alt="Profile" className="w-10 h-10 rounded-full object-cover" /></a>
-                          <h4>{session?.user?.username}</h4>
-                          <p className="text-sm">{session?.user?.email}</p>
-                  
-                       </div>
-                  
-                  <div className="hover:bg-slate-400 p-[5px] rounded-xl  cursor-pointer  ">
-                      
-                  </div>
-
-                  <hr />
-
-                  <div  className="flex gap-3 px-6  hover:bg-slate-400 p-2 rounded-xl cursor-pointer"  >
-                 
-                  <div className="text-2xl text-white">
-                     <IoCalendarNumberOutline />
-                  </div>
-                  <div>
-                  <Link href={"/calendar"}>  <h1 className="pl-2">Calendrier</h1></Link>
-                  </div>
-                </div>
-
-                <div onClick={() => signOut()}
-                  className="flex gap-3 hover:bg-slate-400 p-2 rounded-xl cursor-pointer"
-                >
-                  <div className="text-2xl text-white">
-                    <MdLogout />
-                  </div>
-                  <div>
-                    <h1>Se déconnecter</h1>
-                  </div>
-                </div> 
-                
-              </div>
-            </div>
-          )} */}
+     
           {isAccountOpen && (
   <div className="absolute z-50 border-2 w-[220px] h-[300px] top-11 md:right-[-60px] right-[-15px] rounded-2xl bg-slate-800 shadow-lg">
     <div className="text-white py-4  flex flex-col items-center justify-center space-y-4">
       
       {/* Profile Section */}
       <div className="text-center flex justify-center flex-col items-center   ">
+         
         <a href={session?.user?.profilePic}>
-          <img
-            src={session?.user?.profilePic || "aaaaa"}
-            alt="Profile"
+          
+          <Image 
+            // src={session?.user?.profilePic || "aaaaa"}
+            src={ session?.user?.isAdmin  ?  "https://res.cloudinary.com/dvnsrfsic/image/upload/v1746581898/cxoxegoedy3afxfw6hz0.jpg"  :  session?.user?.profilePic }
+            // src={ session?.user?.isAdmin  ?  "aaaa"  :  session?.user?.profilePic }
+
+            alt="Profile"  width={64} height={64}
             className="w-16 h-16 rounded-full object-cover border-2 border-white mb-2"
+
           />
         </a>
         <h4 className="text-lg font-semibold">{session?.user?.username}</h4>
